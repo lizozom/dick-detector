@@ -2,7 +2,8 @@
 deployment/.ipynb_checkpoints/streamlit-checkpoint.ipynb
 modeling/test38
 venv
-modeling/utils/__pycache__/
+modeling/utils/__pycache__/*
 modeling/node_modules
-modeling/__pycache__/
+modeling/__pycache__/*
 modeling/data/roboflow/*
+modeling/runs/*
