@@ -1,80 +1,37 @@
 import os
 import shutil
-import xml.etree.ElementTree as ET
 
-indir_base = './data/roboflow' # input folder
-xml_outdir = './data/labels'  #txt folder
-img_outdir = './data/images'  # image folder
+INDIR_BASE = './data/roboflow'
+LABELS_OUTDIR = './data/labels' 
+IMG_OUTDIR = './data/images' 
 
-# Converts the structure of roboflow label xmls in a given folder
-# and copies corresponding image to the image folder.
-# Returns a list of processed image names
+TRAIN_FILE = 'data/train.txt'
+VALID_FILE = 'data/valid.txt'
+LABELS_FILE = 'data/duckpuc.names'
+CONFIG_FILE = 'data/duckpuc.data'
+
+# Converts the Roboflow Yolo Darknet structure to a structure 
+# That works for this project
 def handle_roboflow_folder(indir):
     files = os.listdir(indir + '/.')
-    xmls = [f for f in files if f.endswith('.xml')]
+    labels_file = open(os.path.join(indir, "_darknet.labels"), "r")
+    labels = labels_file.readlines()
+
+    box_files = [f for f in files if f.endswith('.txt')]
     images = [f for f in files if f.endswith('.jpg')]
-    for xml in xmls: 
-        txt_file_name = xml.replace('.xml', '.txt')
-        output_txt_file_path = os.path.join(xml_outdir, txt_file_name)
-        file_handle = open(output_txt_file_path, 'w+')
 
-        # actual parsing
-        xml_path = os.path.join(indir, xml)
-        print("opening", xml_path)
-        in_file = open(xml_path)
-        tree = ET.parse(in_file)
-        root = tree.getroot()
-        
-        # Get the image size
-        img_size = root.find('size')
-        image_width = int(img_size.find('width').text)
-        image_height = int(img_size.find('height').text)
-
-        info = get_info_from_xml(root, image_width, image_height)
-        for inf in info:
-            file_handle.write(' '.join(inf) + '\n')
+    for txt in box_files:
+        shutil.copyfile(os.path.join(indir, txt), os.path.join(LABELS_OUTDIR, txt))
 
     for img in images:
-        shutil.copyfile(os.path.join(indir, img), os.path.join(img_outdir, img))
+        shutil.copyfile(os.path.join(indir, img), os.path.join(IMG_OUTDIR, img))
 
-    return images
+    return images, labels
 
-def get_info_from_xml(root, image_width, image_height):
-    result = []
-    for obj in root.iter('object'):
-        name = obj.find('name').text   #get the class name then transfer to number
-        if name == 'dick':
-            class_number = '0'
-        elif name == 'dick-head':
-            class_number = '1'
-        else: 
-            class_number = '2' #wrong class
-            print("unknown class") # if return any wrong class, get correct it
-
-        xmlbox = obj.find('bndbox')
-        xmin = int(xmlbox.find('xmin').text)
-        xmax = int(xmlbox.find('xmax').text)
-        ymin = int(xmlbox.find('ymin').text)
-        ymax = int(xmlbox.find('ymax').text)
         
-        x_center = str((xmin + xmax) / 2 / image_width)
-        y_center = str((ymin + ymax) / 2 / image_height)
-        width = str((xmax - xmin) / image_width)
-        height = str((ymax - ymin) / image_height)
-
-        result.append([
-            class_number,
-            x_center, 
-            y_center, 
-            width,
-            height
-        ])
-    
-    return result
-        
-test_images = handle_roboflow_folder(os.path.join(indir_base, 'test'))
-valid_images = handle_roboflow_folder(os.path.join(indir_base, 'valid'))
-train_images = handle_roboflow_folder(os.path.join(indir_base, 'train'))
+test_images, _ = handle_roboflow_folder(os.path.join(INDIR_BASE, 'test'))
+valid_images, _ = handle_roboflow_folder(os.path.join(INDIR_BASE, 'valid'))
+train_images, labels = handle_roboflow_folder(os.path.join(INDIR_BASE, 'train'))
 
 # merge test and validation images
 test_data = valid_images + test_images
@@ -82,13 +39,28 @@ train_data = train_images
 
 print('test:',len(test_data), 'train:', len(train_data))
 
-f_w = open('./data/train.txt', 'w+')
+# Update training data
+ftrain_w = open(TRAIN_FILE, 'w+')
 for i in train_data:
-    f_w.write('./images/'+i+'\n')
-f_w.close()
+    ftrain_w.write('./images/'+i+'\n')
+ftrain_w.close()
 
-f_w = open('./data/valid.txt', 'w+')
+# Update validation data
+fvalid_w = open(VALID_FILE, 'w+')
 for i in test_data:
-    f_w.write('./images/'+i+'\n')
-f_w.close()
+    fvalid_w.write('./images/'+i+'\n')
+fvalid_w.close()
+
+# Update labels
+flabels_w = open(LABELS_FILE, 'w+')
+flabels_w.writelines(labels)
+flabels_w.close()
+
+# Update config
+flabels_w = open(CONFIG_FILE, 'w+')
+flabels_w.write('classes={}\n'.format(len(labels)))
+flabels_w.write('train={}\n'.format(TRAIN_FILE))
+flabels_w.write('valid={}\n'.format(VALID_FILE))
+flabels_w.write('names={}'.format(LABELS_FILE))
+flabels_w.close()
 
