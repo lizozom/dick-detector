@@ -1,4 +1,4 @@
 classes=2
 train=data/train.txt
 valid=data/valid.txt
-names=data/duckpuc.names
+names=data/modeling.names

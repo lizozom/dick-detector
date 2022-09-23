@@ -1,10 +1,9 @@
-# WearMask: Real-time In-browser Face Mask Detection
+# DickDetector: Real-time In-browser Dick Detection
 
-###  [facemask-detection.com](https://facemask-detection.com) | [arXiv](https://arxiv.org/abs/2101.00784) | [Deployment part](https://github.com/waittim/facemask-detection) 
+### duckpuc
 
-![products.jpg](https://github.com/waittim/waittim.github.io/raw/master/img/products.jpg)
-
-
+This model is used in [duckpuc.com](https://duckpuc.com).
+You can see how to integrate this model into a ncnn+WASM app in [this repo]()
 
 ## Requirements
 
@@ -14,18 +13,30 @@ Please use Python 3.8 with all [requirements.txt](https://github.com/ultralytics
 $ pip install -r requirements.txt
 ```
 
+## 0. Modeling
 
-## Modeling
+The data for this model was created and labeled using [`roboflow`](https://roboflow.com/), a platform used for training of computer vision models. If you want to explore the data used to train this model (beware, adult content), please download it from [here]().
 
-The data has been saved in `./modeling/data/`, if you added any extra image and annotation, please re-run the code in [**10-preparation-process.ipynb**](https://github.com/waittim/mask-detector/blob/master/modeling/10-preparation-process.ipynb) to get the new training set and test set.
+If you want to create your own data set, you can use `roboflow` to create a new `Image Dataset`.
+To use it in this project, use the `Export > YOLO Darknet` format, download the `zip` file and extract it into the `modeling\data\roboflow` folder.
 
-The following steps work on Google Colab.
+![roboflow-export.png](https://github.com/lizozom/dick-detector/tree/master/img/roboflow-export.png)
+
+The file structure needs to be slightly adjusted to be used by this model. Do so by running:
+
+```
+$ cd modeling
+$ python prepare_roboflow_data.py
+```
+
+This will populate the `modeling/data/images` and `modeling/data/labels` folders.
+It will also update the content `modeling.names` and `modeling.names` files.
 
 ### 1. Training
 
 Run this code to train the model based on the pretrained weights **yolo-fastest.weights** from COCO.
 ```bash
-$ python3 train.py --cfg yolo-fastest.cfg --data data/face_mask.data --weights weights/yolo-fastest.weights --epochs 120
+$ python3 train.py --cfg yolo-fastest.cfg --data data/modeling.data --weights weights/yolo-fastest.weights --epochs 120
 ```
 The training process would cost several hours. When the training ended, you can use `from utils import utils; utils.plot_results()` to get the training graphs.
 

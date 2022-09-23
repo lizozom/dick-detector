@@ -7,8 +7,8 @@ IMG_OUTDIR = './data/images'
 
 TRAIN_FILE = 'data/train.txt'
 VALID_FILE = 'data/valid.txt'
-LABELS_FILE = 'data/duckpuc.names'
-CONFIG_FILE = 'data/duckpuc.data'
+LABELS_FILE = 'data/modeling.names'
+CONFIG_FILE = 'data/modeling.data'
 
 # Converts the Roboflow Yolo Darknet structure to a structure 
 # That works for this project
