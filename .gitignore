@@ -7,3 +7,5 @@ modeling/node_modules
 modeling/__pycache__/*
 modeling/data/roboflow/*
 modeling/runs/*
+modeling/data/labels/*
+modeling/data/images/*
