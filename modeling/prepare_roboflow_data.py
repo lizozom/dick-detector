@@ -14,7 +14,7 @@ def handle_roboflow_folder(indir):
     xmls = [f for f in files if f.endswith('.xml')]
     images = [f for f in files if f.endswith('.jpg')]
     for xml in xmls: 
-        txt_file_name = xml.split('.')[0]+'.txt'
+        txt_file_name = xml.replace('.xml', '.txt')
         output_txt_file_path = os.path.join(xml_outdir, txt_file_name)
         file_handle = open(output_txt_file_path, 'w+')
 
