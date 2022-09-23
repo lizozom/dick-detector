@@ -5,3 +5,4 @@ venv
 modeling/utils/__pycache__/
 modeling/node_modules
 modeling/__pycache__/
+modeling/data/roboflow/*
