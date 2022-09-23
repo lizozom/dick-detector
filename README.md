@@ -1,9 +1,10 @@
 # DickDetector: Real-time In-browser Dick Detection
 
-### duckpuc
+### TL;DR 
 
-This model is used in [duckpuc.com](https://duckpuc.com).
-You can see how to integrate this model into a ncnn+WASM app in [this repo]()
+This model is used by [duckpuc.com](https://duckpuc.com) to detect dicks on an edge device and apply amusing filters to them.
+The trained model can be downloaded [here](https://github.com/lizozom/dick-detector/blob/master/modeling/weights/best.pt). You can learn more on how to integrate it with a ncnn+WASM app in [this repo]().
+
 
 ## Requirements
 
@@ -40,7 +41,7 @@ $ python3 train.py --cfg yolo-fastest.cfg --data data/modeling.data --weights we
 ```
 The training process would cost several hours. When the training ended, you can use `from utils import utils; utils.plot_results()` to get the training graphs.
 
-<img src="https://github.com/waittim/mask-detector/blob/master/modeling/results.png" width="900">
+<img src="https://github.com/lizozom/dick-detector/blob/master/modeling/results.png" width="900">
 
 After training, you can get the model weights [best.pt](https://github.com/waittim/mask-detector/blob/master/modeling/weights/best.pt) with its structure [yolo-fastest.cfg](https://github.com/waittim/mask-detector/blob/master/modeling/cfg/yolo-fastest.cfg). You can also use the following code to get the model weights [best.weights](https://github.com/waittim/mask-detector/blob/master/modeling/weights/best.weights) in Darknet format.
 
