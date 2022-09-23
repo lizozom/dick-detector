@@ -20,7 +20,7 @@ The data for this model was created and labeled using [`roboflow`](https://robof
 If you want to create your own data set, you can use `roboflow` to create a new `Image Dataset`.
 To use it in this project, use the `Export > YOLO Darknet` format, download the `zip` file and extract it into the `modeling\data\roboflow` folder.
 
-![roboflow-export.png](https://github.com/lizozom/dick-detector/tree/master/img/roboflow-export.png)
+![roboflow-export.png](https://github.com/lizozom/dick-detector/blob/master/img/roboflow-export.png)
 
 The file structure needs to be slightly adjusted to be used by this model. Do so by running:
 
