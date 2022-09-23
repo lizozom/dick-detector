@@ -3,7 +3,7 @@
 ### TL;DR 
 
 This model is used by [duckpuc.com](https://duckpuc.com) to detect dicks on an edge device and apply amusing filters to them.
-The trained model can be downloaded [here](https://github.com/lizozom/dick-detector/blob/master/modeling/weights/best.pt). You can learn more on how to integrate it with a ncnn+WASM app in [this repo]().
+The trained model can be downloaded [here](https://github.com/lizozom/dick-detector-model/blob/master/modeling/weights/best.pt). You can learn more on how to integrate it with a ncnn+WASM app in [this repo]().
 
 
 ## Requirements
@@ -14,14 +14,14 @@ Please use Python 3.8 with all [requirements.txt](https://github.com/ultralytics
 $ pip install -r requirements.txt
 ```
 
-## 0. Modeling
+## Modeling
 
 The data for this model was created and labeled using [`roboflow`](https://roboflow.com/), a platform used for training of computer vision models. If you want to explore the data used to train this model (beware, adult content), please download it from [here]().
 
 If you want to create your own data set, you can use `roboflow` to create a new `Image Dataset`.
 To use it in this project, use the `Export > YOLO Darknet` format, download the `zip` file and extract it into the `modeling\data\roboflow` folder.
 
-![roboflow-export.png](https://github.com/lizozom/dick-detector/blob/master/img/roboflow-export.png)
+![roboflow-export.png](https://github.com/lizozom/dick-detector-model/blob/master/img/roboflow-export.png)
 
 The file structure needs to be slightly adjusted to be used by this model. Do so by running:
 
@@ -33,7 +33,7 @@ $ python prepare_roboflow_data.py
 This will populate the `modeling/data/images` and `modeling/data/labels` folders.
 It will also update the content `modeling.names` and `modeling.names` files.
 
-### 1. Training
+### Training
 
 Run this code to train the model based on the pretrained weights **yolo-fastest.weights** from COCO.
 ```bash
@@ -41,23 +41,19 @@ $ python3 train.py --cfg yolo-fastest.cfg --data data/modeling.data --weights we
 ```
 The training process would cost several hours. When the training ended, you can use `from utils import utils; utils.plot_results()` to get the training graphs.
 
-<img src="https://github.com/lizozom/dick-detector/blob/master/modeling/results.png" width="900">
+<img src="https://github.com/lizozom/dick-detector-model/blob/master/modeling/results.png" width="900">
 
 After training, you can get the model weights [best.pt](https://github.com/waittim/mask-detector/blob/master/modeling/weights/best.pt) with its structure [yolo-fastest.cfg](https://github.com/waittim/mask-detector/blob/master/modeling/cfg/yolo-fastest.cfg). You can also use the following code to get the model weights [best.weights](https://github.com/waittim/mask-detector/blob/master/modeling/weights/best.weights) in Darknet format.
 
 ```bash
 $ python3  -c "from models import *; convert('cfg/yolo-fastest.cfg', 'weights/best.pt')"
 ```
-### 2. Inference 
+### Inference 
 With the model you got, the inference could be performed directly in this format: `python3 detect.py --source ...` For instance, if you want to use your webcam, please run `python3 detect.py --source 0`.
 
-There are some example cases:
-
- <img src="https://github.com/waittim/waittim.github.io/raw/master/img/mask-examples.jpg" width = "600"  alt="examples" align=center />
-
-Hint: If you want to convert the model to the ONNX format (Not necessary), please check [**20-PyTorch2ONNX.ipynb**](https://github.com/waittim/mask-detector/blob/master/modeling/20-PyTorch2ONNX.ipynb)
-
 ## Deployment
+
+If you want to continue and deploy the model to run in a browser, go ahead and checkout the dick-
 
 The deployment part works based on NCNN and WASM.
 
@@ -100,7 +96,8 @@ To publish the webpage, you can use Github Pages as a free server. For more deta
 
 ## Acknowledgement
 
-The modeling part is modified based on the code from [Ultralytics](https://github.com/ultralytics/yolov3). The model used is modified from the [Yolo-Fastest](https://github.com/dog-qiuqiu/Yolo-Fastest) model shared by dog-qiuqiu. Thanks to [nihui](https://github.com/nihui), the author of NCNN, for her help in the NCNN and WASM approach.
+The modeling part is modified based on the code from [waittim](https://github.com/waittim/mask-detector) which is in turn based on  [Ultralytics](https://github.com/ultralytics/yolov3). The model used is modified from the [Yolo-Fastest](https://github.com/dog-qiuqiu/Yolo-Fastest) model shared by dog-qiuqiu. 
+
 
 
 
