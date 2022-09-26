@@ -33,7 +33,8 @@ $ python prepare_roboflow_data.py
 This will populate the `modeling/data/images` and `modeling/data/labels` folders.
 It will also update the content `modeling.names` and `modeling.names` files.
 
-> **Note**
+
+> **Tip**
 > At the end of this step you should have a the `modeling/data/images` and `modeling/data/labels` populated with images and `txt` label files.
 
 ### Training
