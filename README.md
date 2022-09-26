@@ -33,6 +33,9 @@ $ python prepare_roboflow_data.py
 This will populate the `modeling/data/images` and `modeling/data/labels` folders.
 It will also update the content `modeling.names` and `modeling.names` files.
 
+> **Note**
+> At the end of this step you should have a the `modeling/data/images` and `modeling/data/labels` populated with images and `txt` label files.
+
 ### Training
 
 Run this code to train the model based on the pretrained weights **yolo-fastest.weights** from COCO.
@@ -58,8 +61,8 @@ If you want to continue and deploy the model to run in a browser, go ahead and c
 The deployment part works based on NCNN and WASM.
 
 ### 1. Pytorch to NCNN
-At first, you need to compile the NCNN library. For more details, you can visit [Tutorial for compiling NCNN library
-](https://waittim.github.io/2020/11/10/build-ncnn/) to find the tutorial.
+At first, you need to compile the NCNN library. For more details, use the [tutorial for compiling NCNN library
+](https://waittim.github.io/2020/11/10/build-ncnn/) by @waittim.
 
 When the compilation process of NCNN has been completed, you can start to use various tools in the **ncnn/build/tools** folder to help us convert the model. 
 
